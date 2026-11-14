@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal de Telemetría Fantasma | NASA Space Apps 2026</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuente estilo consola espacial -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/custom.css" />
+  <style>
+    body { font-family: 'Share Tech Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-emerald-400 min-h-screen flex flex-col justify-between crt-scanlines selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- Barra Superior de Telemetría -->
+  <header class="border-b border-emerald-500/40 bg-slate-900/90 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <h1 class="text-lg md:text-2xl font-bold tracking-wider text-emerald-300">TERMINAL DE TELEMETRÍA FANTASMA</h1>
+      </div>
+      <p class="text-xs text-emerald-500/80">RED DE ESPACIO PROFUNDO // EQUIPO MAPACHE COSMOS</p>
+    </div>
+
+    <!-- Selector de Cuerpo Celeste -->
+    <div class="flex gap-2">
+      <button id="btn-luna" class="px-4 py-2 border border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold cursor-pointer">
+        [ 01. LUNA ]
+      </button>
+      <button id="btn-marte" class="px-4 py-2 border border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold cursor-pointer">
+        [ 02. MARTE ]
+      </button>
+    </div>
+  </header>
+
+  <!-- Área Principal: Mapa (Izquierda) + Panel de Datos (Derecha) -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- Visor de Mapa Interactivo (7 columnas en desktop) -->
+    <section class="lg:col-span-7 border border-emerald-500/40 bg-slate-900/60 p-3 rounded relative">
+      <div class="flex justify-between items-center text-xs text-emerald-500 mb-2 border-b border-emerald-500/20 pb-1">
+        <span id="etiqueta-sector">SECTOR ACTIVO: SUPERFICIE LUNAR</span>
+        <span>SELECCIONA UNA BALIZA</span>
+      </div>
+
+      <!-- Contenedor relativo para imagen y pines porcentuales -->
+      <div id="contenedor-mapa" class="relative w-full aspect-square max-h-[520px] mx-auto bg-slate-950 border border-emerald-500/30 overflow-hidden flex items-center justify-center">
+        <img id="imagen-mapa" src="assets/img/mapa_luna.webp" alt="Mapa topográfico espacial" class="w-full h-full object-cover opacity-85" />
+        <!-- Aquí se inyectarán los pines dinámicamente desde app.js -->
+        <div id="capa-pines" class="absolute inset-0"></div>
+      </div>
+    </section>
+
+    <!-- Panel de Telemetría y Bitácora (5 columnas en desktop) -->
+    <aside class="lg:col-span-5 border border-emerald-500/40 bg-slate-900/80 p-4 rounded flex flex-col gap-4">
+      <div class="flex justify-between items-center border-b border-emerald-500/30 pb-2">
+        <span class="text-xs text-amber-400" id="mision-anio">AÑO: --</span>
+        <span class="text-xs text-emerald-500" id="mision-ubicacion">COORDENADAS: EN ESPERA</span>
+      </div>
+
+      <!-- Imagen y Nombre del Hardware -->
+      <div class="flex items-center gap-4">
+        <img id="mision-img" src="assets/img/surveyor3.webp" alt="Hardware NASA" class="w-24 h-24 object-cover border border-emerald-500/50 bg-slate-950 rounded" />
+        <div>
+          <h2 id="mision-nombre" class="text-xl font-bold text-white">Selecciona una baliza en el mapa</h2>
+          <p class="text-xs text-emerald-400/80 mt-1">Haz clic sobre los puntos parpadeantes para interceptar su última transmisión.</p>
+        </div>
+      </div>
+
+      <!-- Relación Ingeniería -> Ciencia -->
+      <div class="bg-slate-950/90 border border-emerald-500/30 p-3 rounded space-y-2 text-sm">
+        <div>
+          <span class="text-amber-400 font-bold block text-xs">[ HARDWARE DESPLEGADO ]</span>
+          <p id="mision-hardware" class="text-slate-300">Esperando selección de telemetría...</p>
+        </div>
+        <div class="border-t border-emerald-500/20 pt-2">
+          <span class="text-cyan-400 font-bold block text-xs">[ DESCUBRIMIENTO CIENTÍFICO ]</span>
+          <p id="mision-ciencia" class="text-slate-300">Esperando selección de telemetría...</p>
+        </div>
+      </div>
+
+      <!-- Reproductor de Bitácora en 1ra Persona -->
+      <div class="bg-emerald-950/20 border border-emerald-500/40 p-3 rounded space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-300">BITÁCORA DE VOZ RECUPERADA</span>
+          <button id="btn-audio" disabled class="px-3 py-1 bg-emerald-500 text-slate-950 font-bold text-xs rounded hover:bg-emerald-400 disabled:opacity-40 cursor-pointer">
+            ▶ REPRODUCIR BITÁCORA
+          </button>
+        </div>
+        <p id="mision-bitacora" class="text-sm text-emerald-100/90 leading-relaxed italic">
+          "..."
+        </p>
+      </div>
+
+      <a id="mision-enlace" href="#" target="_blank" rel="noopener noreferrer" class="hidden text-center text-xs border border-cyan-500/50 text-cyan-300 py-2 rounded hover:bg-cyan-500/10 transition">
+        ↗ VER ARCHIVO OFICIAL EN NASA.GOV
+      </a>
+    </aside>
+  </main>
+
+  <!-- Barra Inferior con Lanzador del Minijuego -->
+  <footer class="border-t border-emerald-500/40 bg-slate-900/95 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <span class="text-xs text-slate-400">Datos e imágenes: NASA Open Data | Proyecto educativo sin fines de lucro</span>
+    <button id="btn-abrir-juego" class="px-4 py-2 bg-amber-500 text-slate-950 font-bold text-sm rounded hover:bg-amber-400 transition cursor-pointer animate-pulse">
+      ⚡ INICIAR PROTOCOLO: ÚLTIMA TRANSMISIÓN (MINIJUEGO)
+    </button>
+  </footer>
+
+  <!-- Modal del Minijuego "Última Transmisión" -->
+  <div id="modal-juego" class="hidden fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-amber-500/60 max-w-xl w-full p-4 rounded-lg space-y-3">
+      <div class="flex justify-between items-center border-b border-amber-500/30 pb-2">
+        <h3 class="text-amber-400 font-bold">PROTOCOLO: ÚLTIMA TRANSMISIÓN (OPPORTUNITY)</h3>
+        <button id="btn-cerrar-juego" class="text-slate-400 hover:text-white font-bold px-2 cursor-pointer">[ X ]</button>
+      </div>
+      <p class="text-xs text-slate-300">Alinea la antena con el haz de señal antes de que la tormenta agote la batería al 0%. Usa las teclas <strong>← / →</strong> o los botones táctiles.</p>
+      
+      <canvas id="canvas-juego" width="520" height="260" class="w-full bg-slate-950 border border-emerald-500/40 rounded"></canvas>
+      
+      <!-- Controles táctiles para Android / iPhone -->
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <button id="btn-izq" class="py-3 bg-slate-800 border border-emerald-500/40 text-emerald-300 font-bold rounded active:bg-emerald-500/30">◄ GIRAR IZQUIERDA</button>
+        <button id="btn-der" class="py-3 bg-slate-800 border border-emerald-500/40 text-emerald-300 font-bold rounded active:bg-emerald-500/30">GIRAR DERECHA ►</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts del proyecto -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+/* Efecto sutil de líneas de escaneo CRT */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+}
+
+/* Animación de pulso para las balizas en el mapa */
+@keyframes radar-pulse {
+  0% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+  100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pin-baliza {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: radar-pulse 2s infinite;
+}
