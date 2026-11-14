@@ -190,7 +190,7 @@ const MISIONES = [
     coordenadas: { top: "36%", left: "68%" },
     imagen: "assets/img/ingenuity.webp",
     audio: "assets/audio/audio_ingenuity.mp3",
-    enlaceNasa: "https://science.nasa.gov/mission/ingenuity/",
+    enlaceNasa: "https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/",
     es: {
       nombre: "Helicóptero Ingenuity",
       ubicacion: "Cráter Jezero (Marte)",
