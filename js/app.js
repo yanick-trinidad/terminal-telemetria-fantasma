@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnAudio.classList.add("bg-emerald-500");
   }
 
-  // Exponer función para que game.js detenga la vista previa si el usuario abre el juego
   window.detenerAudioVistaPrevia = detenerAudioVoz;
 
   // 4. Lógica de la Historia Inicial (Storytelling de Mateo)
@@ -74,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
     introEscenaTitulo.textContent = actual.escena;
     introTexto.textContent = actual.texto;
 
-    // Actualizar los 3 puntos indicadores
     const puntos = introIndicadores.querySelectorAll("span");
     puntos.forEach((p, idx) => {
       p.className = idx === indiceIntro
@@ -82,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         : "w-3 h-3 rounded-full bg-slate-700 transition";
     });
 
-    // Cambiar texto del botón en la última viñeta
     if (indiceIntro === escenas.length - 1) {
       btnSiguienteIntro.textContent = t.introBtnIniciar;
       btnSiguienteIntro.classList.remove("bg-amber-500");
@@ -136,6 +133,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (window.APP_STATE.misionActiva) {
       actualizarPanelMision(window.APP_STATE.misionActiva);
+      // Actualizar la fuente del audio según el idioma actual si no se está reproduciendo
+      if (!reproduciendoVoz) {
+        reproductorVoz.src = window.APP_STATE.misionActiva[lang].audio;
+      }
     } else {
       misionNombre.textContent = lang === "es" ? "Selecciona una baliza en el mapa" : "Select a beacon on the map";
       misionSubguia.textContent = lang === "es" ? "Explora su historia y juega su misión espacial." : "Explore its story and play its space mission.";
@@ -225,7 +226,8 @@ document.addEventListener("DOMContentLoaded", () => {
     detenerAudioVoz();
     actualizarPanelMision(mision);
 
-    reproductorVoz.src = mision.audio;
+    // Reproducir el archivo de audio correspondiente al idioma activo
+    reproductorVoz.src = mision[window.APP_STATE.idioma].audio;
     btnAudio.disabled = false;
     btnAbrirJuego.disabled = false;
   }
@@ -245,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
           btnAudio.classList.add("bg-amber-400");
         })
         .catch(() => {
-          alert(`Audio pendiente en: ${mision.audio}`);
+          alert(`Audio pendiente en: ${mision[window.APP_STATE.idioma].audio}`);
         });
     } else {
       detenerAudioVoz();

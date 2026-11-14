@@ -94,7 +94,7 @@ const HISTORIA_INTRO = {
   ]
 };
 
-// Base de datos de las 4 misiones + Cultura de México + Configuración de su Minijuego
+// Base de datos de las 4 misiones con audios separados por idioma (es / en)
 const MISIONES = [
   {
     id: "surveyor3",
@@ -102,7 +102,6 @@ const MISIONES = [
     anio: "1967",
     coordenadas: { top: "54%", left: "34%" },
     imagen: "assets/img/surveyor3.webp",
-    audio: "assets/audio/audio_surveyor3.mp3",
     enlaceNasa: "https://science.nasa.gov/mission/surveyor-3/",
     es: {
       nombre: "Surveyor 3",
@@ -112,7 +111,8 @@ const MISIONES = [
       mexico: "Desde la Estación de Guaymas (Sonora), técnicos mexicanos monitorearon las señales de telemetría lunar que prepararon el camino para el alunizaje humano.",
       bitacora: "Transmisión recibida desde Oceanus Procellarum. Soy Surveyor 3. Mi brazo excavador probó la firmeza del polvo lunar en 1967 para que los astronautas pudieran aterrizar sin hundirse. Dos años después, el Apolo 12 caminó hasta mí. Hoy permanezco en silencio bajo el sol lunar.",
       juegoTitulo: "MISIÓN 01: EXCAVACIÓN EN OCEANUS PROCELLARUM",
-      juegoInstruccion: "Presiona [ ESPACIO ] o el botón táctil cuando el indicador esté en la zona VERDE para tomar una muestra segura del suelo lunar."
+      juegoInstruccion: "Presiona [ ESPACIO ] o el botón táctil cuando el indicador esté en la zona VERDE para tomar una muestra segura del suelo lunar.",
+      audio: "assets/audio/audio_surveyor3_es.mp3"
     },
     en: {
       nombre: "Surveyor 3",
@@ -122,7 +122,8 @@ const MISIONES = [
       mexico: "From the Guaymas Tracking Station in Sonora, Mexican engineers monitored lunar telemetry signals that paved the way for human landings.",
       bitacora: "Transmission from Oceanus Procellarum. I am Surveyor 3. My mechanical scoop tested lunar dust firmness in 1967 so astronauts could land safely. Two years later, Apollo 12 walked up to me. Today I rest in silence beneath the lunar sun.",
       juegoTitulo: "MISSION 01: OCEANUS PROCELLARUM EXCAVATION",
-      juegoInstruccion: "Press [ SPACE ] or the touch button when the marker is inside the GREEN zone to safely sample the lunar regolith."
+      juegoInstruccion: "Press [ SPACE ] or the touch button when the marker is inside the GREEN zone to safely sample the lunar regolith.",
+      audio: "assets/audio/audio_surveyor3_en.mp3"
     }
   },
   {
@@ -131,7 +132,6 @@ const MISIONES = [
     anio: "1971",
     coordenadas: { top: "28%", left: "53%" },
     imagen: "assets/img/lrv_apolo15.webp",
-    audio: "assets/audio/audio_lrv.mp3",
     enlaceNasa: "https://science.nasa.gov/mission/apollo-15/",
     es: {
       nombre: "Rover Lunar (Apolo 15)",
@@ -141,7 +141,8 @@ const MISIONES = [
       mexico: "Las culturas mesoamericanas dedicaron templos a la Luna (Ixchel y Coyolxauhqui) midiendo sus ciclos; siglos después, la antena de Guaymas recibió la voz del Apolo 15.",
       bitacora: "Señal débil desde los montes Apeninos. Soy el Rover Lunar del Apolo 15. Fui el primer vehículo conducido por humanos fuera de la Tierra, hallando muestras primordiales de la corteza lunar. Mis baterías se agotaron hace décadas, pero mis huellas siguen intactas.",
       juegoTitulo: "MISIÓN 02: RUTA HACIA LA ROCA DEL GÉNESIS",
-      juegoInstruccion: "Usa [ ← / → ] o los botones táctiles para esquivar cráteres y recoger 3 cristales de la Roca del Génesis."
+      juegoInstruccion: "Usa [ ← / → ] o los botones táctiles para esquivar cráteres y recoger 3 cristales de la Roca del Génesis.",
+      audio: "assets/audio/audio_lrv_es.mp3"
     },
     en: {
       nombre: "Lunar Roving Vehicle (Apollo 15)",
@@ -151,7 +152,8 @@ const MISIONES = [
       mexico: "Mesoamerican cultures built temples to the Moon (Ixchel & Coyolxauhqui) tracking its cycles; centuries later, Guaymas Station received Apollo 15's voice.",
       bitacora: "Weak signal from the Apennine Mountains. I am the Apollo 15 Lunar Rover. I was the first vehicle driven by humans beyond Earth, finding primordial lunar crust samples. My batteries died decades ago, yet my tire tracks remain intact.",
       juegoTitulo: "MISSION 02: TRAVERSE TO THE GENESIS ROCK",
-      juegoInstruccion: "Use [ ← / → ] or touch buttons to dodge craters and collect 3 glowing Genesis Rock samples."
+      juegoInstruccion: "Use [ ← / → ] or touch buttons to dodge craters and collect 3 glowing Genesis Rock samples.",
+      audio: "assets/audio/audio_lrv_en.mp3"
     }
   },
   {
@@ -160,7 +162,6 @@ const MISIONES = [
     anio: "2004 - 2018",
     coordenadas: { top: "48%", left: "46%" },
     imagen: "assets/img/opportunity.webp",
-    audio: "assets/audio/audio_opportunity.mp3",
     enlaceNasa: "https://science.nasa.gov/mission/mer-opportunity/",
     es: {
       nombre: "Rover Opportunity (MER-B)",
@@ -170,7 +171,8 @@ const MISIONES = [
       mexico: "En el Códice de Dresde, los astrónomos mayas calcularon el ciclo de 780 días de Marte con asombrosa exactitud matemática mucho antes que existieran los telescopios.",
       bitacora: "Telemetría residual desde Meridiani Planum. Soy Opportunity. Diseñado para 90 días, sobreviví casi 15 años recorriendo 45.16 km y confirmando que Marte tuvo agua líquida. Una tormenta cubrió mis paneles en 2018. Mi última señal fue: 'Mi batería está baja y está oscureciendo'.",
       juegoTitulo: "MISIÓN 03: ÚLTIMA TRANSMISIÓN EN LA TORMENTA",
-      juegoInstruccion: "Mantén la antena alineada con el haz verde usando [ ← / → ] antes de que la tormenta agote la batería al 0%."
+      juegoInstruccion: "Mantén la antena alineada con el haz verde usando [ ← / → ] antes de que la tormenta agote la batería al 0%.",
+      audio: "assets/audio/audio_opportunity_es.mp3"
     },
     en: {
       nombre: "Opportunity Rover (MER-B)",
@@ -180,7 +182,8 @@ const MISIONES = [
       mexico: "In the Dresden Codex, Mayan astronomers calculated Mars' 780-day synodic cycle with astonishing mathematical precision centuries before telescopes.",
       bitacora: "Residual telemetry from Meridiani Planum. I am Opportunity. Built for 90 days, I survived nearly 15 years driving 45.16 km and proving Mars had liquid water. A dust storm covered my panels in 2018. My last signal was: 'My battery is low and it's getting dark'.",
       juegoTitulo: "MISSION 03: LAST TRANSMISSION IN THE STORM",
-      juegoInstruccion: "Keep the dish aligned with the green beam using [ ← / → ] before the dust storm drains battery to 0%."
+      juegoInstruccion: "Keep the dish aligned with the green beam using [ ← / → ] before the dust storm drains battery to 0%.",
+      audio: "assets/audio/audio_opportunity_en.mp3"
     }
   },
   {
@@ -189,7 +192,6 @@ const MISIONES = [
     anio: "2021 - 2024",
     coordenadas: { top: "36%", left: "68%" },
     imagen: "assets/img/ingenuity.webp",
-    audio: "assets/audio/audio_ingenuity.mp3",
     enlaceNasa: "https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/",
     es: {
       nombre: "Helicóptero Ingenuity",
@@ -199,7 +201,8 @@ const MISIONES = [
       mexico: "Hoy México continúa ese legado estelar desde el Gran Telescopio Milimétrico (GTM) en Puebla y con jóvenes ingenieros mexicanos que colaboran en misiones de la NASA.",
       bitacora: "Baliza activa desde el Cráter Jezero. Soy Ingenuity. Mis rotores demostraron que es posible volar en una atmósfera con apenas el 1% de la densidad terrestre. Completé 72 vuelos históricos y hoy sigo operando como estación meteorológica estática.",
       juegoTitulo: "MISIÓN 04: PRIMER VUELO EN CRÁTER JEZERO",
-      juegoInstruccion: "Mantén presionado [ ESPACIO ] o el botón táctil para elevar los rotores y aterriza suavemente en la plataforma verde."
+      juegoInstruccion: "Mantén presionado [ ESPACIO ] o el botón táctil para elevar los rotores y aterriza suavemente en la plataforma verde.",
+      audio: "assets/audio/audio_ingenuity_es.mp3"
     },
     en: {
       nombre: "Ingenuity Mars Helicopter",
@@ -209,7 +212,8 @@ const MISIONES = [
       mexico: "Today Mexico continues this cosmic legacy from the Large Millimeter Telescope (LMT) in Puebla and through Mexican engineers collaborating on NASA missions.",
       bitacora: "Active beacon from Jezero Crater. I am Ingenuity. My rotors proved flight is possible in an atmosphere just 1% as dense as Earth's. I completed 72 historic flights and today continue operating as a static weather station.",
       juegoTitulo: "MISSION 04: FIRST FLIGHT AT JEZERO CRATER",
-      juegoInstruccion: "Hold [ SPACE ] or the touch button to spin rotors and land softly on the green landing pad."
+      juegoInstruccion: "Hold [ SPACE ] or the touch button to spin rotors and land softly on the green landing pad.",
+      audio: "assets/audio/audio_ingenuity_en.mp3"
     }
   }
 ];
