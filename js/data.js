@@ -132,7 +132,7 @@ const MISIONES = [
     anio: "1971",
     coordenadas: { top: "28%", left: "53%" },
     imagen: "assets/img/lrv_apolo15.webp",
-    enlaceNasa: "https://science.nasa.gov/mission/apollo-15/",
+    enlaceNasa: "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C", // <-- Enlace actualizado
     es: {
       nombre: "Rover Lunar (Apolo 15)",
       ubicacion: "Hadley-Apennine (Luna)",
