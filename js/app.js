@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnAudio = document.getElementById("btn-audio");
   const btnAbrirJuego = document.getElementById("btn-abrir-juego");
 
-  // 3. Estado Global (compartido con game.js mediante window.APP_STATE)
+  // 3. Estado Global
   window.APP_STATE = {
     idioma: "es",
     misionActiva: null
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.detenerAudioVistaPrevia = detenerAudioVoz;
 
-  // 4. Lógica de la Historia Inicial (Storytelling de Mateo)
+  // 4. Lógica de la Historia Inicial
   function renderizarViñetaIntro() {
     const lang = window.APP_STATE.idioma;
     const t = TEXTOS_UI[lang];
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pantallaIntro.classList.remove("hidden");
   });
 
-  // 5. Traducción Dinámica de toda la Interfaz (ES / EN)
+  // 5. Traducción Dinámica
   function aplicarIdioma() {
     const lang = window.APP_STATE.idioma;
     const t = TEXTOS_UI[lang];
@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnAudio.textContent = reproduciendoVoz ? t.btnStop : t.btnPlay;
-    misionEnlace.textContent = t.btnNasa;
 
     renderizarViñetaIntro();
     cargarSector(sectorActual, false);
@@ -135,13 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!reproduciendoVoz) {
         reproductorVoz.src = window.APP_STATE.misionActiva[lang].audio;
       }
-    } else {
-      misionNombre.textContent = lang === "es" ? "Selecciona una baliza en el mapa" : "Select a beacon on the map";
-      misionSubguia.textContent = lang === "es" ? "Explora su historia y juega su misión espacial." : "Explore its story and play its space mission.";
-      misionUbicacion.textContent = lang === "es" ? "UBICACIÓN: EN ESPERA" : "LOCATION: STANDBY";
-      misionHardware.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
-      misionCiencia.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
-      misionMexico.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
     }
   }
 
@@ -154,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btnIdiomaIntro.addEventListener("click", alternarIdioma);
 
   // =====================================================================
-  // MOTOR 3D (THREE.JS) PARA PLANETAS INTERACTIVOS ESTILO NASA EYES
+  // MOTOR 3D (THREE.JS) CON TEXTURA REPETIDA Y ROTACIÓN LENTA
   // =====================================================================
   let scene, camera, renderer, planetMesh;
   let isDragging = false;
@@ -164,14 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("contenedor-planeta-3d");
     if (!container) return;
 
-    // Limpiar canvas anterior si existe
     container.querySelector("#canvas-planeta")?.remove();
     const canvas = document.createElement("canvas");
     canvas.id = "canvas-planeta";
     canvas.className = "w-full h-full cursor-grab active:cursor-grabbing";
     container.insertBefore(canvas, container.firstChild);
 
-    // Configuración de la escena Three.js
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.z = 2.8;
@@ -180,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Iluminación ambiental y direccional (Efecto sol lateral)
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
@@ -188,11 +177,15 @@ document.addEventListener("DOMContentLoaded", () => {
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
-    // Geometría esférica del planeta
     const geometry = new THREE.SphereGeometry(1, 64, 64);
     
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(textureUrl, (texture) => {
+      // Rellena los huecos repitiendo la textura horizontalmente
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.repeat.set(2, 1);
+
       const material = new THREE.MeshStandardMaterial({
         map: texture,
         roughness: 0.85,
@@ -203,23 +196,22 @@ document.addEventListener("DOMContentLoaded", () => {
       planetMesh = new THREE.Mesh(geometry, material);
       scene.add(planetMesh);
     }, undefined, (err) => {
-      console.warn("Error cargando textura 3D, usando esfera base:", err);
+      console.warn("Error cargando textura 3D:", err);
       const material = new THREE.MeshStandardMaterial({ color: 0x334155 });
       planetMesh = new THREE.Mesh(geometry, material);
       scene.add(planetMesh);
     });
 
-    // Bucle de animación (Rotación automática sutil)
+    // Rotación automática más lenta y suave (0.0004)
     function animate() {
       requestAnimationFrame(animate);
       if (planetMesh && !isDragging) {
-        planetMesh.rotation.y += 0.0012; 
+        planetMesh.rotation.y += 0.0004; 
       }
       renderer.render(scene, camera);
     }
     animate();
 
-    // Interacción de arrastre con Mouse
     canvas.addEventListener("mousedown", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -240,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
       isDragging = false;
     });
 
-    // Interacción táctil para Celulares y Tablets
     canvas.addEventListener("touchstart", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -269,16 +260,51 @@ document.addEventListener("DOMContentLoaded", () => {
     sectorActual = cuerpo;
     if (reiniciarAudio) detenerAudioVoz();
 
+    if (window.APP_STATE.misionActiva && window.APP_STATE.misionActiva.cuerpo !== cuerpo) {
+      window.APP_STATE.misionActiva = null;
+      btnAudio.disabled = true;
+      btnAbrirJuego.disabled = true;
+    }
+
     if (cuerpo === "luna") {
       etiquetaSector.textContent = t.sectorLuna;
       init3DPlanet("assets/img/mapa_luna.webp");
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
+
+      if (!window.APP_STATE.misionActiva) {
+        misionAnio.textContent = "AÑO: --";
+        misionUbicacion.textContent = "UBICACIÓN: EN ESPERA";
+        misionImg.src = "assets/img/surveyor3.webp";
+        misionNombre.textContent = lang === "es" ? "Selecciona una baliza en el mapa" : "Select a beacon on the map";
+        misionSubguia.textContent = lang === "es" ? "Explora su historia y juega su misión espacial." : "Explore its story and play its space mission.";
+        misionHardware.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
+        misionCiencia.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
+        misionMexico.textContent = lang === "es" ? "Esperando selección..." : "Awaiting selection...";
+        misionBitacora.textContent = "\"-\"";
+        misionEnlace.classList.add("hidden");
+      }
     } else {
       etiquetaSector.textContent = t.sectorMarte;
       init3DPlanet("assets/img/mapa_marte.webp");
       btnMarte.className = "px-4 py-2 border-2 border-amber-400 bg-amber-500/20 text-amber-200 hover:bg-amber-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnLuna.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
+
+      if (!window.APP_STATE.misionActiva) {
+        misionAnio.textContent = lang === "es" ? "PLANETA: MARTE" : "PLANET: MARS";
+        misionUbicacion.textContent = lang === "es" ? "SECTOR: PLANETARIO (NASA MARS FACTS)" : "SECTOR: PLANETARY (NASA MARS FACTS)";
+        misionImg.src = "assets/img/opportunity.webp";
+        misionNombre.textContent = lang === "es" ? "Planeta Rojo - Archivos Oficiales NASA" : "Red Planet - Official NASA Archives";
+        misionSubguia.textContent = lang === "es" ? "Selecciona una baliza de sonda o consulta los datos globales." : "Select a probe beacon or view global data.";
+        misionHardware.textContent = lang === "es" ? "Atmósfera tenue de dióxido de carbono, volcanes y casquetes polares." : "Thin carbon dioxide atmosphere, volcanoes, and polar ice caps.";
+        misionCiencia.textContent = t.marsFactsTexto;
+        misionMexico.textContent = lang === "es" ? "Estudio orbital y comparativa con el ciclo de 780 días del Códice de Dresde." : "Orbital study compared with the 780-day cycle of geospatial archives.";
+        misionBitacora.textContent = lang === "es" ? "\"Transmitiendo datos globales desde el archivo oficial de Mars Facts.\"" : "\"Transmitting global data from the official Mars Facts archive.\"";
+        misionEnlace.href = "https://science.nasa.gov/mars/facts/";
+        misionEnlace.textContent = t.btnMarsFactsLink;
+        misionEnlace.classList.remove("hidden");
+        misionEnlace.classList.add("block");
+      }
     }
 
     capaPines.innerHTML = "";
@@ -290,7 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pin.type = "button";
       pin.style.top = mision.coordenadas.top;
       pin.style.left = mision.coordenadas.left;
-      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-20 absolute";
+      // IMPORTANTE: z-30 y pointer-events-auto para permitir clics sobre el globo 3D
+      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-30 absolute pointer-events-auto";
 
       pin.innerHTML = `
         <span class="w-5 h-5 rounded-full bg-emerald-400 border-2 border-slate-950 block group-hover:bg-amber-400 transition shadow-lg"></span>
@@ -299,7 +326,10 @@ document.addEventListener("DOMContentLoaded", () => {
         </span>
       `;
 
-      pin.addEventListener("click", () => seleccionarMision(mision));
+      pin.addEventListener("click", (e) => {
+        e.stopPropagation();
+        seleccionarMision(mision);
+      });
       capaPines.appendChild(pin);
     });
   }
@@ -323,6 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
     misionBitacora.textContent = `"${datos.bitacora}"`;
 
     misionEnlace.href = mision.enlaceNasa;
+    misionEnlace.textContent = TEXTOS_UI[lang].btnNasa;
     misionEnlace.classList.remove("hidden");
     misionEnlace.classList.add("block");
   }
@@ -338,7 +369,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnAbrirJuego.disabled = false;
   }
 
-  // Reproductor manual de bitácora en ficha
   btnAudio.addEventListener("click", () => {
     const mision = window.APP_STATE.misionActiva;
     if (!mision) return;
@@ -364,6 +394,5 @@ document.addEventListener("DOMContentLoaded", () => {
   btnLuna.addEventListener("click", () => cargarSector("luna"));
   btnMarte.addEventListener("click", () => cargarSector("marte"));
 
-  // Inicializar aplicación
   aplicarIdioma();
 });
