@@ -132,13 +132,20 @@
         <span class="text-amber-300 animate-pulse">● TOCA UNA BALIZA</span>
       </div>
 
-      <div class="relative w-full aspect-square max-h-[520px] mx-auto bg-slate-950 border border-emerald-500/30 rounded overflow-hidden flex items-center justify-center">
-        <iframe 
-          src="https://quickmap.lroc.im-ldi.com/?camera=408641.9769%2C-6534111.2119%2C-5479585.0054%2C-0.0479%2C0.7654%2C0.6418%2C0.0401%2C-0.6406%2C0.7668%2C60&earthShadowEnabled=true&proj=22&stack=3314" 
-          class="w-full h-full border-0 opacity-90 hover:opacity-100 transition" 
-          title="NASA LROC QuickMap Lunar"
-          allowfullscreen>
-        </iframe>
+      <!-- Contenedor del Motor 3D (Three.js) -->
+      <div id="contenedor-planeta-3d" class="relative w-full aspect-square max-h-[520px] mx-auto bg-slate-950 border border-emerald-500/30 rounded overflow-hidden flex items-center justify-center">
+        <canvas id="canvas-planeta" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+        <div id="capa-pines" class="absolute inset-0 pointer-events-none"></div>
+      </div>
+
+      <!-- Botón de acceso directo al LROC QuickMap oficial de la NASA -->
+      <div class="mt-3">
+        <a href="https://quickmap.lroc.im-ldi.com/?camera=408641.9769%2C-6534111.2119%2C-5479585.0054%2C-0.0479%2C0.7654%2C0.6418%2C0.0401%2C-0.6406%2C0.7668%2C60&earthShadowEnabled=true&proj=22&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-slate-950 border border-amber-400/70 text-amber-300 hover:bg-amber-400 hover:text-slate-950 font-bold text-xs md:text-sm rounded-lg shadow-md transition">
+          🛰️ EXPLORAR MAPA 3D OFICIAL EN LROC QUICKMAP (NASA) ↗
+        </a>
       </div>
     </section>
 
