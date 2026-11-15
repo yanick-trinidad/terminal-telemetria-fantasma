@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnIdioma = document.getElementById("btn-idioma");
   const etiquetaSector = document.getElementById("etiqueta-sector");
   const capaPines = document.getElementById("capa-pines");
-  const btnMapaOficial = document.getElementById("btn-mapa-oficial"); // Referencia al botón dinámico del mapa
+  const btnMapaOficial = document.getElementById("btn-mapa-oficial");
 
   // Panel Derecho (Telemetría + Cultura México)
   const misionAnio = document.getElementById("mision-anio");
@@ -147,11 +147,27 @@ document.addEventListener("DOMContentLoaded", () => {
   btnIdiomaIntro.addEventListener("click", alternarIdioma);
 
   // =====================================================================
-  // MOTOR 3D (THREE.JS) CON TEXTURA REPETIDA Y ROTACIÓN LENTA
+  // MOTOR 3D (THREE.JS) CON BALIZAS DINÁMICAS Y ROTACIÓN SOLO POR ARRASTRE
   // =====================================================================
   let scene, camera, renderer, planetMesh;
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
+  let activePinsData = [];
+
+  function getMissionVector(id) {
+    switch (id) {
+      case 'surveyor3':
+        return new THREE.Vector3(-0.35, 0.25, 0.90).normalize();
+      case 'lrv_apolo15':
+        return new THREE.Vector3(0.25, 0.45, 0.85).normalize();
+      case 'opportunity':
+        return new THREE.Vector3(-0.20, 0.15, 0.96).normalize();
+      case 'ingenuity':
+        return new THREE.Vector3(0.40, 0.30, 0.86).normalize();
+      default:
+        return new THREE.Vector3(0, 0, 1);
+    }
+  }
 
   function init3DPlanet(textureUrl) {
     const container = document.getElementById("contenedor-planeta-3d");
@@ -202,15 +218,55 @@ document.addEventListener("DOMContentLoaded", () => {
       scene.add(planetMesh);
     });
 
+    // Bucle de animación: Sin rotación automática (solo renderiza y proyecta pines)
     function animate() {
       requestAnimationFrame(animate);
-      if (planetMesh && !isDragging) {
-        planetMesh.rotation.y += 0.0004; 
+
+      if (planetMesh && container) {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        activePinsData.forEach(item => {
+          // Obtener la posición mundial del pin basada en la rotación de la esfera 3D
+          const worldPos = item.vector.clone().applyMatrix4(planetMesh.matrixWorld);
+          
+          // Verificar si está frente a la cámara (en el espacio de la cámara)
+          const vectorCamSpace = worldPos.clone().applyMatrix4(camera.matrixWorldInverse);
+
+          if (vectorCamSpace.z < 0) {
+            // Proyectar coordenadas 3D a coordenadas de pantalla 2D
+            const v = worldPos.clone().project(camera);
+            const x = (v.x *  0.5 + 0.5) * width;
+            const y = (v.y * -0.5 + 0.5) * height;
+
+            item.element.style.left = `${x}px`;
+            item.element.style.top = `${y}px`;
+            
+            // Comprobar si está en el horizonte visible de la esfera
+            const normal = worldPos.clone().sub(planetMesh.position).normalize();
+            const camDir = camera.position.clone().sub(worldPos).normalize();
+            const dot = normal.dot(camDir);
+
+            if (dot < 0.15) {
+              item.element.style.opacity = '0';
+              item.element.style.pointerEvents = 'none';
+            } else {
+              item.element.style.opacity = '1';
+              item.element.style.pointerEvents = 'auto';
+            }
+            item.element.style.display = 'flex';
+          } else {
+            // Ocultar si está en la parte trasera del planeta
+            item.element.style.display = 'none';
+          }
+        });
       }
+
       renderer.render(scene, camera);
     }
     animate();
 
+    // Controles de arrastre (Mouse)
     canvas.addEventListener("mousedown", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -231,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isDragging = false;
     });
 
+    // Controles táctiles (Celulares y Tablets)
     canvas.addEventListener("touchstart", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -271,7 +328,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
-      // Actualizar botón inferior para la LUNA (LROC QuickMap)
       if (btnMapaOficial) {
         btnMapaOficial.href = "https://quickmap.lroc.im-ldi.com/?camera=408641.9769%2C-6534111.2119%2C-5479585.0054%2C-0.0479%2C0.7654%2C0.6418%2C0.0401%2C-0.6406%2C0.7668%2C60&earthShadowEnabled=true&proj=22&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg";
         btnMapaOficial.textContent = lang === "es" ? "🛰️ EXPLORAR MAPA 3D OFICIAL EN LROC QUICKMAP (NASA) ↗" : "🛰️ EXPLORE OFFICIAL 3D MAP IN LROC QUICKMAP (NASA) ↗";
@@ -295,7 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btnMarte.className = "px-4 py-2 border-2 border-amber-400 bg-amber-500/20 text-amber-200 hover:bg-amber-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnLuna.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
-      // Actualizar botón inferior para MARTE (NASA Eyes on the Solar System)
       if (btnMapaOficial) {
         btnMapaOficial.href = "https://eyes.nasa.gov/apps/solar-system/#/mars";
         btnMapaOficial.textContent = lang === "es" ? "🔴 EXPLORAR MARTE EN NASA EYES ON THE SOLAR SYSTEM ↗" : "🔴 EXPLORE MARS IN NASA EYES ON THE SOLAR SYSTEM ↗";
@@ -318,16 +373,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Generar balizas dinámicas en 3D
     capaPines.innerHTML = "";
+    activePinsData = [];
     const filtradas = MISIONES.filter((m) => m.cuerpo === cuerpo);
 
     filtradas.forEach((mision) => {
       const datos = mision[lang];
       const pin = document.createElement("button");
       pin.type = "button";
-      pin.style.top = mision.coordenadas.top;
-      pin.style.left = mision.coordenadas.left;
-      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-30 absolute pointer-events-auto";
+      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-30 absolute pointer-events-auto transform -translate-x-1/2 -translate-y-1/2";
 
       pin.innerHTML = `
         <span class="w-5 h-5 rounded-full bg-emerald-400 border-2 border-slate-950 block group-hover:bg-amber-400 transition shadow-lg"></span>
@@ -341,6 +396,9 @@ document.addEventListener("DOMContentLoaded", () => {
         seleccionarMision(mision);
       });
       capaPines.appendChild(pin);
+
+      const vector3 = getMissionVector(mision.id);
+      activePinsData.push({ element: pin, vector: vector3 });
     });
   }
 
