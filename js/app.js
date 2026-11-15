@@ -1,5 +1,5 @@
 // Lógica Principal v2.0 - Storytelling de Mateo, Consola Bilingüe y Puente México-NASA
-// MEMORIE IN SPACE - Equipo Nova Itsat
+// MEMORIES IN SPACE - Equipo Nova Itsat
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Referencias Pantalla 1 (Storytelling Intro)
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnIdioma = document.getElementById("btn-idioma");
   const etiquetaSector = document.getElementById("etiqueta-sector");
   const capaPines = document.getElementById("capa-pines");
+  const btnMapaOficial = document.getElementById("btn-mapa-oficial"); // Referencia al botón dinámico del mapa
 
   // Panel Derecho (Telemetría + Cultura México)
   const misionAnio = document.getElementById("mision-anio");
@@ -181,7 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(textureUrl, (texture) => {
-      // Rellena los huecos repitiendo la textura horizontalmente
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.ClampToEdgeWrapping;
       texture.repeat.set(2, 1);
@@ -202,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scene.add(planetMesh);
     });
 
-    // Rotación automática más lenta y suave (0.0004)
     function animate() {
       requestAnimationFrame(animate);
       if (planetMesh && !isDragging) {
@@ -253,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 6. Mapa Interactivo / Globos 3D (Luna / Marte)
+  // 6. Mapa Interactivo / Globos 3D (Luna / Marte) con Botón Dinámico Oficial
   function cargarSector(cuerpo, reiniciarAudio = true) {
     const lang = window.APP_STATE.idioma;
     const t = TEXTOS_UI[lang];
@@ -272,6 +271,12 @@ document.addEventListener("DOMContentLoaded", () => {
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
+      // Actualizar botón inferior para la LUNA (LROC QuickMap)
+      if (btnMapaOficial) {
+        btnMapaOficial.href = "https://quickmap.lroc.im-ldi.com/?camera=408641.9769%2C-6534111.2119%2C-5479585.0054%2C-0.0479%2C0.7654%2C0.6418%2C0.0401%2C-0.6406%2C0.7668%2C60&earthShadowEnabled=true&proj=22&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg";
+        btnMapaOficial.textContent = lang === "es" ? "🛰️ EXPLORAR MAPA 3D OFICIAL EN LROC QUICKMAP (NASA) ↗" : "🛰️ EXPLORE OFFICIAL 3D MAP IN LROC QUICKMAP (NASA) ↗";
+      }
+
       if (!window.APP_STATE.misionActiva) {
         misionAnio.textContent = "AÑO: --";
         misionUbicacion.textContent = "UBICACIÓN: EN ESPERA";
@@ -289,6 +294,12 @@ document.addEventListener("DOMContentLoaded", () => {
       init3DPlanet("assets/img/mapa_marte.webp");
       btnMarte.className = "px-4 py-2 border-2 border-amber-400 bg-amber-500/20 text-amber-200 hover:bg-amber-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnLuna.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
+
+      // Actualizar botón inferior para MARTE (NASA Eyes on the Solar System)
+      if (btnMapaOficial) {
+        btnMapaOficial.href = "https://eyes.nasa.gov/apps/solar-system/#/mars";
+        btnMapaOficial.textContent = lang === "es" ? "🔴 EXPLORAR MARTE EN NASA EYES ON THE SOLAR SYSTEM ↗" : "🔴 EXPLORE MARS IN NASA EYES ON THE SOLAR SYSTEM ↗";
+      }
 
       if (!window.APP_STATE.misionActiva) {
         misionAnio.textContent = lang === "es" ? "PLANETA: MARTE" : "PLANET: MARS";
@@ -316,7 +327,6 @@ document.addEventListener("DOMContentLoaded", () => {
       pin.type = "button";
       pin.style.top = mision.coordenadas.top;
       pin.style.left = mision.coordenadas.left;
-      // IMPORTANTE: z-30 y pointer-events-auto para permitir clics sobre el globo 3D
       pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-30 absolute pointer-events-auto";
 
       pin.innerHTML = `
