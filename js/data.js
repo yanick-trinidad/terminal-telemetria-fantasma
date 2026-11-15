@@ -27,6 +27,11 @@ const TEXTOS_UI = {
     btnNasa: "↗ VER ARCHIVO OFICIAL EN NASA.GOV",
     btnJugarMision: "🎮 INICIAR MISIÓN JUGABLE (AUDIO SINCRONIZADO)",
 
+    // Datos Planetarios de Marte (Mars Facts)
+    lblMarsFacts: "[ 🔴 DATOS PLANETARIOS DE MARTE ]",
+    marsFactsTexto: "Marte es un planeta rocoso (terrestre) frío y desértico con una atmósfera muy tenue. Posee estaciones, casquetes polares de hielo, volcanes extintos y cicatrices de antiguos ríos.",
+    btnMarsFactsLink: "↗ EXPLORAR DATOS OFICIALES EN NASA.GOV",
+
     // Modal del Juego
     lblAudioBloqueado: "📡 TRANSMISIÓN EN CURSO — ESCUCHA LA BITÁCORA MIENTRAS COMPLETAS LA MISIÓN",
     btnCerrarJuego: "[ SALIR DE MISIÓN ]"
@@ -55,6 +60,11 @@ const TEXTOS_UI = {
     btnStop: "❚❚ STOP AUDIO",
     btnNasa: "↗ VIEW OFFICIAL ARCHIVE ON NASA.GOV",
     btnJugarMision: "🎮 LAUNCH PLAYABLE MISSION (SYNCED AUDIO)",
+
+    // Mars Planetary Facts
+    lblMarsFacts: "[ 🔴 MARS PLANETARY FACTS ]",
+    marsFactsTexto: "Mars is a cold, desert-like rocky planet with a very thin atmosphere. It features seasons, polar ice caps, extinct volcanoes, and evidence of ancient floods.",
+    btnMarsFactsLink: "↗ EXPLORE OFFICIAL DATA ON NASA.GOV",
 
     // Game Modal
     lblAudioBloqueado: "📡 TRANSMISSION IN PROGRESS — LISTEN TO THE LOG WHILE COMPLETING THE MISSION",
@@ -132,7 +142,7 @@ const MISIONES = [
     anio: "1971",
     coordenadas: { top: "28%", left: "53%" },
     imagen: "assets/img/lrv_apolo15.webp",
-    enlaceNasa: "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C", // <-- Enlace actualizado
+    enlaceNasa: "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C",
     es: {
       nombre: "Rover Lunar (Apolo 15)",
       ubicacion: "Hadley-Apennine (Luna)",
@@ -208,7 +218,7 @@ const MISIONES = [
       nombre: "Ingenuity Mars Helicopter",
       ubicacion: "Jezero Crater (Mars)",
       hardware: "1.8 kg autonomous rotorcraft with counter-rotating carbon-fiber blades spinning at 2,400 rpm.",
-      ciencia: "Enginereed for the first powered, controlled flight on another planet, completing 72 aerial scouting flights.",
+      ciencia: "Achieved the first powered, controlled flight on another planet, completing 72 aerial scouting flights.",
       mexico: "Today Mexico continues this cosmic legacy from the Large Millimeter Telescope (LMT) in Puebla and through Mexican engineers collaborating on NASA missions.",
       bitacora: "Active beacon from Jezero Crater. I am Ingenuity. My rotors proved flight is possible in an atmosphere just 1% as dense as Earth's. I completed 72 historic flights and today continue operating as a static weather station.",
       juegoTitulo: "MISSION 04: FIRST FLIGHT AT JEZERO CRATER",
