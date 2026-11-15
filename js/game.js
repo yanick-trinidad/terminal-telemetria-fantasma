@@ -38,13 +38,17 @@ document.addEventListener("DOMContentLoaded", () => {
   let anguloAntena = 0, anguloObjetivo = 0.4, velObjetivo = 0.013, polvo = []; // Opportunity
   let heliY = 190, heliVelY = 0, heliX = 80, viento = 0; // Ingenuity
 
-  function iniciarAudioObligatorio(rutaAudio) {
+function iniciarAudioObligatorio(rutaAudio) {
     if (window.detenerAudioVistaPrevia) window.detenerAudioVistaPrevia();
     audioMision.pause();
     audioMision.src = rutaAudio;
     audioMision.currentTime = 0;
-    audioMision.play().catch(() => {
-      // Si el .mp3 aún no existe en assets/audio/, el juego continúa sin errores
+    
+    // Intenta reproducir y reporta cualquier error o éxito en la consola (F12)
+    audioMision.play().then(() => {
+      console.log("Audio de misión reproducido correctamente:", rutaAudio);
+    }).catch((error) => {
+      console.warn("Aviso de audio: El archivo no se encontró en assets/audio/ o el navegador bloqueó la reproducción automática.", rutaAudio, error);
     });
   }
 

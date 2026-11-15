@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   btnSiguienteIntro.addEventListener("click", () => {
-    sonarEfectoRadio();
+    sonarEfectoRadio(); // <--- Asegúrate de que esta línea esté aquí
     const totalEscenas = HISTORIA_INTRO[window.APP_STATE.idioma].length;
     if (indiceIntro < totalEscenas - 1) {
       indiceIntro++;
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pantallaIntro.classList.add("hidden");
     }
   });
-
+  
   btnSaltarIntro.addEventListener("click", () => {
     sonarEfectoRadio();
     pantallaIntro.classList.add("hidden");
