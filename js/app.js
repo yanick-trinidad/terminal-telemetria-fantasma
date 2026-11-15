@@ -1,5 +1,5 @@
 // Lógica Principal v2.0 - Storytelling de Mateo, Consola Bilingüe y Puente México-NASA
-// Terminal de Telemetría Fantasma - Equipo Mapache Cosmos
+// MEMORIE IN SPACE - Equipo Nova Itsat
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Referencias Pantalla 1 (Storytelling Intro)
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnMarte = document.getElementById("btn-marte");
   const btnIdioma = document.getElementById("btn-idioma");
   const etiquetaSector = document.getElementById("etiqueta-sector");
-  const imagenMapa = document.getElementById("imagen-mapa");
   const capaPines = document.getElementById("capa-pines");
 
   // Panel Derecho (Telemetría + Cultura México)
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   btnSiguienteIntro.addEventListener("click", () => {
-    sonarEfectoRadio(); // <--- Asegúrate de que esta línea esté aquí
+    sonarEfectoRadio();
     const totalEscenas = HISTORIA_INTRO[window.APP_STATE.idioma].length;
     if (indiceIntro < totalEscenas - 1) {
       indiceIntro++;
@@ -101,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pantallaIntro.classList.add("hidden");
     }
   });
-  
+
   btnSaltarIntro.addEventListener("click", () => {
     sonarEfectoRadio();
     pantallaIntro.classList.add("hidden");
@@ -133,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (window.APP_STATE.misionActiva) {
       actualizarPanelMision(window.APP_STATE.misionActiva);
-      // Actualizar la fuente del audio según el idioma actual si no se está reproduciendo
       if (!reproduciendoVoz) {
         reproductorVoz.src = window.APP_STATE.misionActiva[lang].audio;
       }
@@ -155,7 +153,116 @@ document.addEventListener("DOMContentLoaded", () => {
   btnIdioma.addEventListener("click", alternarIdioma);
   btnIdiomaIntro.addEventListener("click", alternarIdioma);
 
-  // 6. Mapa Interactivo (Luna / Marte)
+  // =====================================================================
+  // MOTOR 3D (THREE.JS) PARA PLANETAS INTERACTIVOS ESTILO NASA EYES
+  // =====================================================================
+  let scene, camera, renderer, planetMesh;
+  let isDragging = false;
+  let previousMousePosition = { x: 0, y: 0 };
+
+  function init3DPlanet(textureUrl) {
+    const container = document.getElementById("contenedor-planeta-3d");
+    if (!container) return;
+
+    // Limpiar canvas anterior si existe
+    container.querySelector("#canvas-planeta")?.remove();
+    const canvas = document.createElement("canvas");
+    canvas.id = "canvas-planeta";
+    canvas.className = "w-full h-full cursor-grab active:cursor-grabbing";
+    container.insertBefore(canvas, container.firstChild);
+
+    // Configuración de la escena Three.js
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 2.8;
+
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Iluminación ambiental y direccional (Efecto sol lateral)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.3);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
+
+    // Geometría esférica del planeta
+    const geometry = new THREE.SphereGeometry(1, 64, 64);
+    
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(textureUrl, (texture) => {
+      const material = new THREE.MeshStandardMaterial({
+        map: texture,
+        roughness: 0.85,
+        metalness: 0.1
+      });
+
+      if (planetMesh) scene.remove(planetMesh);
+      planetMesh = new THREE.Mesh(geometry, material);
+      scene.add(planetMesh);
+    }, undefined, (err) => {
+      console.warn("Error cargando textura 3D, usando esfera base:", err);
+      const material = new THREE.MeshStandardMaterial({ color: 0x334155 });
+      planetMesh = new THREE.Mesh(geometry, material);
+      scene.add(planetMesh);
+    });
+
+    // Bucle de animación (Rotación automática sutil)
+    function animate() {
+      requestAnimationFrame(animate);
+      if (planetMesh && !isDragging) {
+        planetMesh.rotation.y += 0.0012; 
+      }
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Interacción de arrastre con Mouse
+    canvas.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging || !planetMesh) return;
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+
+      planetMesh.rotation.y += deltaX * 0.005;
+      planetMesh.rotation.x += deltaY * 0.005;
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+
+    // Interacción táctil para Celulares y Tablets
+    canvas.addEventListener("touchstart", (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+
+    window.addEventListener("touchmove", (e) => {
+      if (!isDragging || !planetMesh) return;
+      const deltaX = e.touches[0].clientX - previousMousePosition.x;
+      const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+      planetMesh.rotation.y += deltaX * 0.005;
+      planetMesh.rotation.x += deltaY * 0.005;
+
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+
+    window.addEventListener("touchend", () => {
+      isDragging = false;
+    });
+  }
+
+  // 6. Mapa Interactivo / Globos 3D (Luna / Marte)
   function cargarSector(cuerpo, reiniciarAudio = true) {
     const lang = window.APP_STATE.idioma;
     const t = TEXTOS_UI[lang];
@@ -164,12 +271,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cuerpo === "luna") {
       etiquetaSector.textContent = t.sectorLuna;
-      imagenMapa.src = "assets/img/mapa_luna.webp";
+      init3DPlanet("assets/img/mapa_luna.webp");
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
     } else {
       etiquetaSector.textContent = t.sectorMarte;
-      imagenMapa.src = "assets/img/mapa_marte.webp";
+      init3DPlanet("assets/img/mapa_marte.webp");
       btnMarte.className = "px-4 py-2 border-2 border-amber-400 bg-amber-500/20 text-amber-200 hover:bg-amber-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnLuna.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
     }
@@ -183,10 +290,10 @@ document.addEventListener("DOMContentLoaded", () => {
       pin.type = "button";
       pin.style.top = mision.coordenadas.top;
       pin.style.left = mision.coordenadas.left;
-      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none";
+      pin.className = "pin-baliza group flex flex-col items-center cursor-pointer focus:outline-none z-20 absolute";
 
       pin.innerHTML = `
-        <span class="w-5 h-5 rounded-full bg-emerald-400 border-2 border-slate-950 block group-hover:bg-amber-400 transition"></span>
+        <span class="w-5 h-5 rounded-full bg-emerald-400 border-2 border-slate-950 block group-hover:bg-amber-400 transition shadow-lg"></span>
         <span class="mt-1 px-2 py-0.5 text-xs font-bold bg-slate-950/90 border border-emerald-500/70 text-emerald-200 rounded whitespace-nowrap group-hover:border-amber-400 group-hover:text-amber-300">
           ${datos.nombre}
         </span>
@@ -226,7 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
     detenerAudioVoz();
     actualizarPanelMision(mision);
 
-    // Reproducir el archivo de audio correspondiente al idioma activo
     reproductorVoz.src = mision[window.APP_STATE.idioma].audio;
     btnAudio.disabled = false;
     btnAbrirJuego.disabled = false;
