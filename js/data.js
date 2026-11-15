@@ -127,7 +127,6 @@ const MISIONES = [
     }
   },
   {
-    {
     id: "lrv_apolo15",
     cuerpo: "luna",
     anio: "1971",
@@ -143,20 +142,8 @@ const MISIONES = [
       bitacora: "Señal débil desde los montes Apeninos. Soy el Rover Lunar del Apolo 15. Fui el primer vehículo conducido por humanos fuera de la Tierra, hallando muestras primordiales de la corteza lunar. Mis baterías se agotaron hace décadas, pero mis huellas siguen intactas.",
       juegoTitulo: "MISIÓN 02: RUTA HACIA LA ROCA DEL GÉNESIS",
       juegoInstruccion: "Usa [ ← / → ] o los botones táctiles para esquivar cráteres y recoger 3 cristales de la Roca del Génesis.",
-      audio: "assets/audio/audio_lrv_es.mp3" // <--- Ruta actualizada en español
+      audio: "assets/audio/audio_lrv_es.mp3"
     },
-    en: {
-      nombre: "Lunar Roving Vehicle (Apollo 15)",
-      ubicacion: "Hadley-Apennine (Moon)",
-      hardware: "Foldable 4-wheel electric rover with zinc-coated wire mesh tires and silver-zinc batteries.",
-      ciencia: "Enabled a 27.9 km traverse to collect the 'Genesis Rock', revealing the ancient age of the lunar crust.",
-      mexico: "Mesoamerican cultures built temples to the Moon (Ixchel & Coyolxauhqui) tracking its cycles; centuries later, Guaymas Station received Apollo 15's voice.",
-      bitacora: "Weak signal from the Apennine Mountains. I am the Apollo 15 Lunar Rover. I was the first vehicle driven by humans beyond Earth, finding primordial lunar crust samples. My batteries died decades ago, yet my tire tracks remain intact.",
-      juegoTitulo: "MISSION 02: TRAVERSE TO THE GENESIS ROCK",
-      juegoInstruccion: "Use [ ← / → ] or touch buttons to dodge craters and collect 3 glowing Genesis Rock samples.",
-      audio: "assets/audio/audio_lrv_en.mp3" // <--- Ruta actualizada en inglés
-    }
-  },
     en: {
       nombre: "Lunar Roving Vehicle (Apollo 15)",
       ubicacion: "Hadley-Apennine (Moon)",
@@ -221,7 +208,7 @@ const MISIONES = [
       nombre: "Ingenuity Mars Helicopter",
       ubicacion: "Jezero Crater (Mars)",
       hardware: "1.8 kg autonomous rotorcraft with counter-rotating carbon-fiber blades spinning at 2,400 rpm.",
-      ciencia: "Achieved the first powered, controlled flight on another planet, completing 72 aerial scouting flights.",
+      ciencia: "Enginereed for the first powered, controlled flight on another planet, completing 72 aerial scouting flights.",
       mexico: "Today Mexico continues this cosmic legacy from the Large Millimeter Telescope (LMT) in Puebla and through Mexican engineers collaborating on NASA missions.",
       bitacora: "Active beacon from Jezero Crater. I am Ingenuity. My rotors proved flight is possible in an atmosphere just 1% as dense as Earth's. I completed 72 historic flights and today continue operating as a static weather station.",
       juegoTitulo: "MISSION 04: FIRST FLIGHT AT JEZERO CRATER",
