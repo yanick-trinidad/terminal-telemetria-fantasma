@@ -1,9 +1,9 @@
-# 📡 Terminal de Telemetría Fantasma | El Códice del Espacio Profundo
+# 📡 MEMORIE IN SPACE | El Códice del Espacio Profundo
 
-**Proyecto desarrollado por el Equipo Mapache Cosmos para el NASA Space Apps Challenge.**
+**Proyecto desarrollado por el Equipo Nova Itsat para el NASA Space Apps Challenge.**
 
 ## 🌌 Descripción del Proyecto
-**Terminal de Telemetría Fantasma** es una aplicación web interactiva y bilingüe (Español / Inglés) diseñada para la divulgación científica infantil y juvenil. A través de la historia de **Mateo** (un niño de 10 años que descubre la bitácora de su abuelo, antiguo ingeniero de la Estación Rastreadora de Guaymas, Sonora), los usuarios exploran el vínculo histórico entre la astronomía mexicana y las misiones robóticas de la NASA en la Luna y Marte.
+**MEMORIE IN SPACE** es una aplicación web interactiva y bilingüe (Español / Inglés) diseñada para la divulgación científica infantil y juvenil. A través de la historia de **Mateo** (un niño de 10 años que descubre la bitácora de su abuelo, antiguo ingeniero de la Estación Rastreadora de Guaymas, Sonora), los usuarios exploran el vínculo histórico entre la astronomía mexicana y las misiones robóticas de la NASA en la Luna y Marte.
 
 ### ✨ Características Principales
 * **Storytelling Interactivo:** Introducción narrativa que conecta la herencia astronómica mesoamericana y la Estación de Guaymas con la exploración espacial moderna.

@@ -1,5 +1,5 @@
 // Diccionario Bilingüe (ES / EN), Storytelling de Mateo, Identidad Cultural México y 4 Misiones
-// Terminal de Telemetría Fantasma - Equipo Mapache Cosmos
+// MEMORIE IN SPACE - Equipo Nova Itsat
 
 const TEXTOS_UI = {
   es: {
@@ -11,8 +11,8 @@ const TEXTOS_UI = {
     introBtnSaltar: "Saltar historia ➔",
 
     // Pantalla 2: Consola Principal
-    titulo: "TERMINAL DE TELEMETRÍA FANTASMA",
-    subtitulo: "PUENTE ESTELAR MÉXICO – NASA // EQUIPO MAPACHE COSMOS",
+    titulo: "MEMORIE IN SPACE",
+    subtitulo: "PUENTE ESTELAR MÉXICO – NASA // EQUIPO NOVA ITSAT",
     btnHistoria: "📖 HISTORIA",
     btnLuna: "🌑 LUNA",
     btnMarte: "🔴 MARTE",
@@ -40,8 +40,8 @@ const TEXTOS_UI = {
     introBtnSaltar: "Skip story ➔",
 
     // Screen 2: Main Console
-    titulo: "GHOST TELEMETRY TERMINAL",
-    subtitulo: "MEXICO – NASA STAR BRIDGE // TEAM MAPACHE COSMOS",
+    titulo: "MEMORIE IN SPACE",
+    subtitulo: "MEXICO – NASA STAR BRIDGE // TEAM NOVA ITSAT",
     btnHistoria: "📖 STORY",
     btnLuna: "🌑 MOON",
     btnMarte: "🔴 MARS",
