@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnIdioma = document.getElementById("btn-idioma");
   const etiquetaSector = document.getElementById("etiqueta-sector");
   const capaPines = document.getElementById("capa-pines");
-  const btnMapaOficial = document.getElementById("btn-mapa-oficial");
+  const btnMapaOficial = document.getElementById("btn-mapa-oficial"); // Botón dinámico del mapa oficial
 
   // Panel Derecho (Telemetría + Cultura México)
   const misionAnio = document.getElementById("mision-anio");
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btnIdiomaIntro.addEventListener("click", alternarIdioma);
 
   // =====================================================================
-  // MOTOR 3D (THREE.JS) CON BALIZAS DINÁMICAS Y ROTACIÓN SOLO POR ARRASTRE
+  // MOTOR 3D (THREE.JS) CON BALIZAS DINÁMICAS Y ROTACIÓN MANUAL POR ARRASTRE
   // =====================================================================
   let scene, camera, renderer, planetMesh;
   let isDragging = false;
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
       scene.add(planetMesh);
     });
 
-    // Bucle de animación: Sin rotación automática (solo renderiza y proyecta pines)
+    // Bucle de animación: Sin rotación automática, sincroniza la posición de las balizas 3D en pantalla
     function animate() {
       requestAnimationFrame(animate);
 
@@ -227,14 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const height = container.clientHeight;
 
         activePinsData.forEach(item => {
-          // Obtener la posición mundial del pin basada en la rotación de la esfera 3D
           const worldPos = item.vector.clone().applyMatrix4(planetMesh.matrixWorld);
-          
-          // Verificar si está frente a la cámara (en el espacio de la cámara)
           const vectorCamSpace = worldPos.clone().applyMatrix4(camera.matrixWorldInverse);
 
           if (vectorCamSpace.z < 0) {
-            // Proyectar coordenadas 3D a coordenadas de pantalla 2D
             const v = worldPos.clone().project(camera);
             const x = (v.x *  0.5 + 0.5) * width;
             const y = (v.y * -0.5 + 0.5) * height;
@@ -242,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
             item.element.style.left = `${x}px`;
             item.element.style.top = `${y}px`;
             
-            // Comprobar si está en el horizonte visible de la esfera
             const normal = worldPos.clone().sub(planetMesh.position).normalize();
             const camDir = camera.position.clone().sub(worldPos).normalize();
             const dot = normal.dot(camDir);
@@ -256,7 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             item.element.style.display = 'flex';
           } else {
-            // Ocultar si está en la parte trasera del planeta
             item.element.style.display = 'none';
           }
         });
@@ -266,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     animate();
 
-    // Controles de arrastre (Mouse)
+    // Controles de arrastre con Mouse
     canvas.addEventListener("mousedown", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -287,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isDragging = false;
     });
 
-    // Controles táctiles (Celulares y Tablets)
+    // Controles táctiles para Celulares y Tablets
     canvas.addEventListener("touchstart", (e) => {
       isDragging = true;
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -324,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cuerpo === "luna") {
       etiquetaSector.textContent = t.sectorLuna;
-      init3DPlanet("assets/img/mapa_luna.webp");
+      init3DPlanet("assets/img/mapa_luna.jpg"); // Asegúrate de usar tu imagen equirectangular .jpg o .webp
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
