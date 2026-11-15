@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cuerpo === "luna") {
       etiquetaSector.textContent = t.sectorLuna;
-      init3DPlanet("assets/img/mapa_luna.jpg"); // Asegúrate de usar tu imagen equirectangular .jpg o .webp
+      init3DPlanet("assets/img/mapa_luna.jpg"); // Usando tu nueva textura JPG equirectangular
       btnLuna.className = "px-4 py-2 border-2 border-emerald-400 bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnMarte.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       etiquetaSector.textContent = t.sectorMarte;
-      init3DPlanet("assets/img/mapa_marte.webp");
+      init3DPlanet("assets/img/mapa_marte.jpg"); // Usando tu nueva textura JPG oficial de Marte
       btnMarte.className = "px-4 py-2 border-2 border-amber-400 bg-amber-500/20 text-amber-200 hover:bg-amber-500/40 transition font-bold rounded cursor-pointer text-sm";
       btnLuna.className = "px-4 py-2 border-2 border-emerald-500/40 bg-slate-950 text-emerald-500 hover:border-emerald-400 hover:text-emerald-200 transition font-bold rounded cursor-pointer text-sm";
 
